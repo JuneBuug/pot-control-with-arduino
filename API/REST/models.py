@@ -16,6 +16,9 @@ class Plant(models.Model):
     is_led_active = models.BooleanField(default=False)
     device_token = models.CharField(max_length=1024)
 
+    def __str__(self):
+        return self.name + "(" + self.kind + ")"
+
 
 '''
 식물 로그 모델
@@ -29,6 +32,7 @@ class PlantLog(models.Model):
     humidity = models.IntegerField()  # 토양 조도 퍼센트로
     brightness = models.IntegerField()  # 조도
 
-
+    def __str__(self):
+        return self.plant.name + "(" + self.plant.kind + ") " + str(self.created_date.timestamp())
 
 

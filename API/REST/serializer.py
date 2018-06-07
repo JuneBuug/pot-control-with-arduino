@@ -9,6 +9,8 @@ class PlantSerializer(serializers.ModelSerializer):
 
 
 class PlantLogSerializer(serializers.ModelSerializer):
+    plant_info = PlantSerializer(source='plant')
+
     class Meta:
         model = PlantLog
-        fields = ['plant','created_date', 'temperature', 'humidity', 'brightness']
+        fields = ['plant_info', 'created_date', 'temperature', 'humidity', 'brightness']
