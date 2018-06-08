@@ -14,3 +14,9 @@ class PlantLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlantLog
         fields = ['plant_info', 'created_date', 'temperature', 'humidity', 'brightness']
+
+
+class LEDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Plant
+        fields = ['id', 'is_led_active']
