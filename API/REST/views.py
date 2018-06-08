@@ -45,7 +45,19 @@ class LogAPI(GenericAPIView, mixins.ListModelMixin):
 
     def get_queryset(self):
         queryset = PlantLog.objects.all()
+        plant_id = self.request.query_params.get('id', None)
+        if plant_id is not None:
+            queryset = queryset.filter(plant_id=plant_id).order_by('-created_date')
+        queryset = queryset[:1]
         return queryset
+
+    def post(self, request, *args, **kwargs):
+        if request.POST['id']:
+            plant = Plant.objects.get(id=request.POST['id'])
+            PlantLog.objects.create(plant=plant, temperature=request.POST['temperature'], humidity=request.POST['humidity'], brightness=request.POST['brightness'])
+            return Response(data='LOG IS SUCCESSFULLY CREATED', status=status.HTTP_201_CREATED)
+        else:
+            return Response(data='PLANT ID IS EMPTY', status=status.HTTP_400_BAD_REQUEST)
 
 
 def strToBool(v):

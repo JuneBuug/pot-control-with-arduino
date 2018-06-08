@@ -26,7 +26,7 @@ class Plant(models.Model):
 
 
 class PlantLog(models.Model):
-    plant = models.ForeignKey('Plant', on_delete=models.CASCADE, null=False ,blank=False)
+    plant = models.ForeignKey('Plant', on_delete=models.CASCADE, null=False, blank=False)
     created_date = models.DateTimeField(auto_now_add=True)
     temperature = models.IntegerField()  # 온도
     humidity = models.IntegerField()  # 토양 조도 퍼센트로
