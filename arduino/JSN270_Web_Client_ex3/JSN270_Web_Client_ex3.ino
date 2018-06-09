@@ -17,7 +17,7 @@
 #endif
 
 #define HOST_IP        "74,125,232,128" // www.google.com
-#define REMOTE_PORT    8200
+#define REMOTE_PORT    80
 #define PROTOCOL       "TCP"
 
 SoftwareSerial mySerial(3, 2); // RX, TX
@@ -121,9 +121,9 @@ void loop() {
  double temp =  Thermistor(readVal);
  
  if(current_time - prev_time >10000){
-  JSN270.print("GET /?temp=");
-  JSN270.print(temp);
-  JSN270.println("&humi=65 HTTP/1.1");
+  JSN270.print("GET /api/plant ");
+  //JSN270.print(temp);
+  JSN270.println("HTTP/1.1");
   JSN270.println("Host: 13.125.92.56");
   JSN270.println();
   prev_time = current_time;
