@@ -16,6 +16,7 @@ def str2Bool(v):
     if v == 'true':
         return True
 
+
 class PlantAPI(GenericAPIView, mixins.ListModelMixin):
     serializer_class = PlantSerializer
 
@@ -36,7 +37,7 @@ class PlantAPI(GenericAPIView, mixins.ListModelMixin):
         if request.POST['name']:
             is_on = request.POST['is_led_active']
             obj = Plant.objects.create(name=request.POST['name'], kind=request.POST['kind'], device_token=request.POST['device_token'])
-            obj.is_led_active = strToBool(is_on)
+            obj.is_led_active = str2Bool(is_on)
             obj.save()
             return Response(data='PLANT IS SUCCESSFULLY CREATED', status=status.HTTP_201_CREATED)
         else:
@@ -63,7 +64,7 @@ class LogAPI(GenericAPIView, mixins.ListModelMixin):
     def post(self, request, *args, **kwargs):
         if request.POST['id']:
             plant = Plant.objects.get(id=request.POST['id'])
-            PlantLog.objects.create(plant=plant, temperature=request.POST['temperature'], humidity=request.POST['humidity'], brightness=request.POST['brightness'])
+            PlantLog.objects.create(plant=plant, temperature=request.POST['temperature'], humidity=request.POST['humidity'], brightness=request.POST['brightness'],soil_water=request.POST['soil_water'])
             return Response(data='LOG IS SUCCESSFULLY CREATED', status=status.HTTP_201_CREATED)
         else:
             return Response(data='PLANT ID IS EMPTY', status=status.HTTP_400_BAD_REQUEST)
