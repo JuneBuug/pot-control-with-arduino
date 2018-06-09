@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import mixins, status
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from REST.models import *
 from REST.serializer import PlantSerializer, PlantLogSerializer,LEDSerializer
@@ -26,7 +28,7 @@ class PlantAPI(GenericAPIView, mixins.ListModelMixin):
     def get_queryset(self):
         queryset = Plant.objects.all()
         device_token = self.request.query_params.get('device_token', None)
-        plant_id = self.request.query_params.get('id',None)
+        plant_id = self.request.query_params.get('id', None)
         if device_token is not None:
             queryset = queryset.filter(device_token=device_token)
         if plant_id is not None:
@@ -94,3 +96,13 @@ class LedAPI(GenericAPIView, mixins.ListModelMixin):
             return Response(data='PlANT ID IS EMPTY', status=status.HTTP_400_BAD_REQUEST)
 
 
+class TestAPI(APIView):
+    """
+      A view that returns the count of active users in JSON.
+      """
+    renderer_classes = (JSONRenderer,)
+
+    def get(self, request, format=None):
+        plant = Plant.objects.first()
+        content = {'id': plant.id, 'is_led_active': plant.is_led_active}
+        return Response(content)
