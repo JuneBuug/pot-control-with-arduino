@@ -4,8 +4,8 @@
 #include <SoftwareSerial.h>
 #include <math.h>
 
-#define SSID      "윤소영의 iPhone"    // your wifi network SSID
-#define KEY       "yoonsso0315"    // your wifi network password
+#define SSID      "준킴"    // your wifi network SSID
+#define KEY       "junekim0613"    // your wifi network password
 #define AUTH       "WPA2"     // your wifi network security (NONE, WEP, WPA, WPA2)
 
 #define USE_DHCP_IP 1
@@ -118,14 +118,23 @@ void loop() {
 
  unsigned long current_time = millis();
  int readVal=analogRead(sensorPin);
- double temp =  Thermistor(readVal);
- 
+ //double temp =  Thermistor(readVal);
+ String data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33&is_led_active=false";
  if(current_time - prev_time >10000){
-  JSN270.print("GET /api/plant ");
-  //JSN270.print(temp);
+//  JSN270.print("GET /api/plant ");
+//  JSN270.println("HTTP/1.1");
+//  JSN270.println("Host: 13.125.92.56");
+//  JSN270.println();
+  JSN270.print("POST /api/led ");
   JSN270.println("HTTP/1.1");
   JSN270.println("Host: 13.125.92.56");
+  JSN270.println("User-Agent: Arduino/1.0");
+  JSN270.println("Connection: close");
+  JSN270.println("Content-Type: application/x-www-form-urlencoded;");
+  JSN270.print("Content-Length: ");
+  JSN270.println(data.length());
   JSN270.println();
+  JSN270.println(data);
   prev_time = current_time;
   }
  
