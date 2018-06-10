@@ -26,9 +26,13 @@ JSN270 JSN270(&mySerial);
 
 int sensorPin = A0; // select the input pin for the potentiometer
 String demo_key = "f2f423e8-467f-4ff1-9dfa-1674c615ef33";
+String data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33";
 String response = "";
 String sensor_res = ""; // 온습조도센서 값 
 int ledPin = 7;
+String temperature = "";
+String humidity = "";
+String lux = "";
 
 void setup() {
   char c;
@@ -138,10 +142,40 @@ void loop() {
  int readVal=analogRead(sensorPin); // 토양 습도값
  Serial.print("토양센서: ");
  Serial.println(readVal);
- Serial.print("읽어볼까 : ");
+ Serial.print("센서패킷 : ");
  Serial.println(sensor_res);
  
-// //String data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33&is_led_active=false";
+data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33";
+
+ if(sensor_res.length()>0){
+   String str = sensor_res.substring(6);
+   if(str.indexOf(",") != -1){
+      str = str.substring(str.indexOf(",")+1);
+      int idx = str.indexOf(",");
+      temperature = str.substring(0,idx);
+      str = str.substring(idx+1);
+      idx = str.indexOf(",");
+      humidity = str.substring(0,idx);
+      lux = str.substring(idx+1);
+      
+     
+//      Serial.println(temperature);
+//      Serial.println(humidity);
+//      Serial.println(lux);
+  }
+   
+ }
+  data += "&temperature=";
+  data += temperature;
+  data += "&humidity=";
+  data += humidity;
+  data += "&brightness=";
+  data += lux;
+  data += "&soil_water=";
+  data += (String) readVal; 
+ Serial.println(data);
+
+ delay(500);
  
  mySerial.listen();
   if (mySerial.isListening()) {
@@ -157,16 +191,17 @@ void loop() {
   JSN270.println("HTTP/1.1");
   JSN270.println("Host: 13.125.92.56");
   JSN270.println();
-//  JSN270.print("POST /api/led ");
-//  JSN270.println("HTTP/1.1");
-//  JSN270.println("Host: 13.125.92.56");
-//  JSN270.println("User-Agent: Arduino/1.0");
-//  JSN270.println("Connection: close");
-//  JSN270.println("Content-Type: application/x-www-form-urlencoded;");
-//  JSN270.print("Content-Length: ");
-//  JSN270.println(data.length());
-//  JSN270.println();
-//  JSN270.println(data);
+  
+  JSN270.print("POST /api/log ");
+  JSN270.println("HTTP/1.1");
+  JSN270.println("Host: 13.125.92.56");
+  JSN270.println("User-Agent: Arduino/1.0");
+  JSN270.println("Connection: close");
+  JSN270.println("Content-Type: application/x-www-form-urlencoded;");
+  JSN270.print("Content-Length: ");
+  JSN270.println(data.length());
+  JSN270.println();
+  JSN270.println(data);
 //  prev_time = current_time;
 //  }
   delay(200);
@@ -178,7 +213,7 @@ void loop() {
   }
 
   if(response.indexOf("False") != -1){
-    digitalWrite(ledPin,LOW);digitalWrite(ledPin,LOW);
+    digitalWrite(ledPin,LOW);
   }
 }
 
