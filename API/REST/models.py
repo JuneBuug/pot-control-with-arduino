@@ -28,10 +28,10 @@ class Plant(models.Model):
 class PlantLog(models.Model):
     plant = models.ForeignKey('Plant', on_delete=models.CASCADE, null=False, blank=False)
     created_date = models.DateTimeField(auto_now_add=True)
-    temperature = models.IntegerField()  # 온도
-    humidity = models.IntegerField()   # 토양 습도 퍼센트로
-    brightness = models.IntegerField()  # 조도
-    soil_water = models.IntegerField()  # 토양 수분 (퍼센트)
+    temperature = models.CharField(max_length=256)  # 온도
+    humidity = models.CharField(max_length=256)  # 토양 습도 퍼센트로
+    brightness = models.CharField(max_length=256) # 조도
+    soil_water = models.CharField(max_length=256)  # 토양 수분 (퍼센트)
 
     def __str__(self):
         return self.plant.name + "(" + self.plant.kind + ") " + str(self.created_date.timestamp())

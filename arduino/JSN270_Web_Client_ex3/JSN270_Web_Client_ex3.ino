@@ -3,7 +3,6 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 #include <math.h>
-#include <ArduinoJson.h>
 
 #define SSID      "준킴"    // your wifi network SSID
 #define KEY       "junekim0613"    // your wifi network password
@@ -22,36 +21,27 @@
 #define PROTOCOL       "TCP"
 
 SoftwareSerial mySerial(3, 2); // RX, TX
- 
+SoftwareSerial sensorSerial(5, 4);
 JSN270 JSN270(&mySerial);
 
 int sensorPin = A0; // select the input pin for the potentiometer
 String demo_key = "f2f423e8-467f-4ff1-9dfa-1674c615ef33";
 String response = "";
+String sensor_res = ""; // 온습조도센서 값 
 int ledPin = 7;
-
-
-double Thermistor(int RawADC) {
-  double Temp;
-  Temp = log(10000.0*((1024.0/RawADC-1))); 
-  Temp = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp * Temp ))* Temp );
-  Temp = Temp - 273.15;            // Convert Kelvin to Celcius
-   //Temp = (Temp * 9.0)/ 5.0 + 32.0; // Convert Celcius to Fahrenheit
-   return Temp;
-}
 
 void setup() {
   char c;
   String hostname;
   char hostip[32];
 
-  
-  
   mySerial.begin(9600);
+  
   Serial.begin(9600);
 
   pinMode(ledPin,OUTPUT);
   digitalWrite(ledPin,HIGH);
+  pinMode(sensorPin,INPUT);
 
   Serial.println("--------- JSN270 Web Client Test --------");
   
@@ -120,24 +110,46 @@ void setup() {
 
     Serial.println("connected to server");
   }
+
+  sensorSerial.begin(9600);
 }
 
 unsigned long prev_time=0;
 
 void loop() {
 
- unsigned long current_time = millis();
- int readVal=analogRead(sensorPin);
+ sensorSerial.listen();
+ delay(500);
 
 
-if (Serial.available())
-  {
-    Serial.write(Serial.read());
+  if (sensorSerial.isListening()) {
+   Serial.println("sensorSerial is listening!"); 
   }
+  
+ while(sensorSerial.available())
+ {
+    //Serial.write(sensorSerial.read());
+    if(sensorSerial.readString().startsWith("@T154")){
+      sensor_res = sensorSerial.readString();
+    }
+ }
 
+ unsigned long current_time = millis();
+ int readVal=analogRead(sensorPin); // 토양 습도값
+ Serial.print("토양센서: ");
+ Serial.println(readVal);
+ Serial.print("읽어볼까 : ");
+ Serial.println(sensor_res);
  
- String data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33&is_led_active=false";
- if(current_time - prev_time >20000){
+// //String data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33&is_led_active=false";
+ 
+ mySerial.listen();
+  if (mySerial.isListening()) {
+   Serial.println("mySerial is listening!"); 
+  }
+ 
+ delay(500);
+// if(current_time - prev_time > 40000){
   JSN270.print("GET /api/test");
   JSN270.print("?id=");
   JSN270.print(demo_key);
@@ -155,59 +167,30 @@ if (Serial.available())
 //  JSN270.println(data.length());
 //  JSN270.println();
 //  JSN270.println(data);
-  prev_time = current_time;
-  }
-
+//  prev_time = current_time;
+//  }
+  delay(200);
   int idx = 0;
   while(JSN270.available()){
-    response += (char)JSN270.read();
+    response = JSN270.readString();
+  if(response.indexOf("True") != -1){
+    digitalWrite(ledPin,HIGH);
   }
 
-//  Serial.print(response);
-  //if(text.startsWith("\"F")){ // 만약 받아온 정보가 False이면 led를 끈다.
-  if(response.indexOf("Fa") != -1 || response.indexOf("Tr")!=-1){  
-    if(response.indexOf("Fa") > response.indexOf("Tr")){
-      Serial.println("LOW");
-      digitalWrite(ledPin, LOW);
-    } else {
-      Serial.println("HIGH");
-      digitalWrite(ledPin, HIGH);
-    }
-  
-  
+  if(response.indexOf("False") != -1){
+    digitalWrite(ledPin,LOW);digitalWrite(ledPin,LOW);
   }
-  
+}
 
+//  if(response.indexOf("Fa") != -1 || response.indexOf("Tr")!=-1){  
+//    if(response.indexOf("Fa") > response.indexOf("Tr")){
+//      Serial.println("LOW");
+//      response = "";
+//      digitalWrite(ledPin, LOW);
+//    } else if(response.indexOf("Fa") < response.indexOf("Tr")){
+//      Serial.println("HIGH");
+//      digitalWrite(ledPin, HIGH);
+//    }
 
-  
-
-  
-// Serial.println(json);
-//  StaticJsonBuffer<200> jsonBuffer;
-  //Serial.println(json);
-//  JsonObject& array = jsonBuffer.parseObject(json);
-//  const char* plant_id = array["id"];
-  //Serial.println(plant_id);
-  //Serial.println("출력");
-//  for (auto& arr : array) {
-//   const char* plant_id = arr["id"];
-//   const char* name = arr["name"];
-//   Serial.println(plant_id);
-//   Serial.println("출력");
-  
-//  String str;
-//  str = String(json);
-//  Serial.println(str);
-//  
-//  int id_idx = str.indexOf("id");
-//  int next_id_idx = str.indexOf(",", id_idx+1);
-//  int led_idx = str.indexOf("is_led_active");
-//  int next_led_idx = str.indexOf(",", led_idx+1);
-
-  //Serial.println(str.substring(id_idx, next_id_idx));
-  //Serial.println(str.substring(led_idx, next_led_idx));
-
-  
-  
-  
+//  }
 }
