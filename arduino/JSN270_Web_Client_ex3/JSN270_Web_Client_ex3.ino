@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 #include <math.h>
+#include <ArduinoJson.h>
 
 #define SSID      "준킴"    // your wifi network SSID
 #define KEY       "junekim0613"    // your wifi network password
@@ -25,7 +26,11 @@ SoftwareSerial mySerial(3, 2); // RX, TX
 JSN270 JSN270(&mySerial);
 
 int sensorPin = A0; // select the input pin for the potentiometer
- 
+String demo_key = "f2f423e8-467f-4ff1-9dfa-1674c615ef33";
+String response = "";
+int ledPin = 7;
+
+
 double Thermistor(int RawADC) {
   double Temp;
   Temp = log(10000.0*((1024.0/RawADC-1))); 
@@ -40,11 +45,16 @@ void setup() {
   String hostname;
   char hostip[32];
 
+  
+  
   mySerial.begin(9600);
   Serial.begin(9600);
 
-  Serial.println("--------- JSN270 Web Client Test --------");
+  pinMode(ledPin,OUTPUT);
+  digitalWrite(ledPin,HIGH);
 
+  Serial.println("--------- JSN270 Web Client Test --------");
+  
   // wait for initilization of JSN270
   delay(5000);
   //JSN270.reset();
@@ -118,27 +128,86 @@ void loop() {
 
  unsigned long current_time = millis();
  int readVal=analogRead(sensorPin);
- //double temp =  Thermistor(readVal);
+
+
+if (Serial.available())
+  {
+    Serial.write(Serial.read());
+  }
+
+ 
  String data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33&is_led_active=false";
- if(current_time - prev_time >10000){
-//  JSN270.print("GET /api/plant ");
-//  JSN270.println("HTTP/1.1");
-//  JSN270.println("Host: 13.125.92.56");
-//  JSN270.println();
-  JSN270.print("POST /api/led ");
+ if(current_time - prev_time >20000){
+  JSN270.print("GET /api/test");
+  JSN270.print("?id=");
+  JSN270.print(demo_key);
+  JSN270.print(" ");
   JSN270.println("HTTP/1.1");
   JSN270.println("Host: 13.125.92.56");
-  JSN270.println("User-Agent: Arduino/1.0");
-  JSN270.println("Connection: close");
-  JSN270.println("Content-Type: application/x-www-form-urlencoded;");
-  JSN270.print("Content-Length: ");
-  JSN270.println(data.length());
   JSN270.println();
-  JSN270.println(data);
+//  JSN270.print("POST /api/led ");
+//  JSN270.println("HTTP/1.1");
+//  JSN270.println("Host: 13.125.92.56");
+//  JSN270.println("User-Agent: Arduino/1.0");
+//  JSN270.println("Connection: close");
+//  JSN270.println("Content-Type: application/x-www-form-urlencoded;");
+//  JSN270.print("Content-Length: ");
+//  JSN270.println(data.length());
+//  JSN270.println();
+//  JSN270.println(data);
   prev_time = current_time;
   }
- 
+
+  int idx = 0;
   while(JSN270.available()){
-    Serial.write((char)JSN270.read());  
-  } 
+    response += (char)JSN270.read();
+  }
+
+//  Serial.print(response);
+  //if(text.startsWith("\"F")){ // 만약 받아온 정보가 False이면 led를 끈다.
+  if(response.indexOf("Fa") != -1 || response.indexOf("Tr")!=-1){  
+    if(response.indexOf("Fa") > response.indexOf("Tr")){
+      Serial.println("LOW");
+      digitalWrite(ledPin, LOW);
+    } else {
+      Serial.println("HIGH");
+      digitalWrite(ledPin, HIGH);
+    }
+  
+  
+  }
+  
+
+
+  
+
+  
+// Serial.println(json);
+//  StaticJsonBuffer<200> jsonBuffer;
+  //Serial.println(json);
+//  JsonObject& array = jsonBuffer.parseObject(json);
+//  const char* plant_id = array["id"];
+  //Serial.println(plant_id);
+  //Serial.println("출력");
+//  for (auto& arr : array) {
+//   const char* plant_id = arr["id"];
+//   const char* name = arr["name"];
+//   Serial.println(plant_id);
+//   Serial.println("출력");
+  
+//  String str;
+//  str = String(json);
+//  Serial.println(str);
+//  
+//  int id_idx = str.indexOf("id");
+//  int next_id_idx = str.indexOf(",", id_idx+1);
+//  int led_idx = str.indexOf("is_led_active");
+//  int next_led_idx = str.indexOf(",", led_idx+1);
+
+  //Serial.println(str.substring(id_idx, next_id_idx));
+  //Serial.println(str.substring(led_idx, next_led_idx));
+
+  
+  
+  
 }
