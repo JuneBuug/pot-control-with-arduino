@@ -103,6 +103,7 @@ class TestAPI(APIView):
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, format=None):
-        plant = Plant.objects.first()
-        content = {'id': plant.id, 'is_led_active': plant.is_led_active}
+        plant_id = self.request.query_params.get('id', None)
+        plant = Plant.objects.get(id=plant_id)
+        content = str(plant.is_led_active)
         return Response(content)
