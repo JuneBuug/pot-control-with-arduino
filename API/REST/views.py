@@ -58,14 +58,14 @@ class LogAPI(GenericAPIView, mixins.ListModelMixin):
         queryset = PlantLog.objects.all()
         plant_id = self.request.query_params.get('id', None)
         num = self.request.query_params.get('num',None)
-        temperature = self.request.query_params.get('temperature', None)
-        humidity = self.request.query_params.get('humidity', None)
-        brightness = self.request.query_params.get('brightness', None)
-        soil_water = self.request.query_params.get('soil_water', None)
-
-        plant = Plant.objects.get(id=plant_id)
-        PlantLog.objects.create(plant=plant, temperature=temperature, humidity=humidity,
-                                brightness=brightness, soil_water=soil_water)
+        # temperature = self.request.query_params.get('temperature', None)
+        # humidity = self.request.query_params.get('humidity', None)
+        # brightness = self.request.query_params.get('brightness', None)
+        # soil_water = self.request.query_params.get('soil_water', None)
+        #
+        # plant = Plant.objects.get(id=plant_id)
+        # PlantLog.objects.create(plant=plant, temperature=temperature, humidity=humidity,
+        #                         brightness=brightness, soil_water=soil_water)
         if plant_id is not None:
             queryset = queryset.filter(plant_id=plant_id).order_by('-created_date')
 
