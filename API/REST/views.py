@@ -77,7 +77,7 @@ class LogAPI(GenericAPIView, mixins.ListModelMixin):
         if request.POST['id']:
             plant = Plant.objects.get(id=request.POST['id'])
             PlantLog.objects.create(plant=plant, temperature=request.POST['temperature'], humidity=request.POST['humidity'], brightness=request.POST['brightness'], soil_water=request.POST['soil_water'])
-            return Response(data='LOG IS SUCCESSFULLY CREATED', status=status.HTTP_201_CREATED)
+            return Response(data=plant.is_led_active, status=status.HTTP_201_CREATED)
         else:
             return Response(data='PLANT ID IS EMPTY', status=status.HTTP_400_BAD_REQUEST)
 
