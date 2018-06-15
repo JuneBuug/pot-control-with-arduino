@@ -122,6 +122,7 @@ unsigned long prev_time=0;
 
 void loop() {
 
+ sensorSerial.begin(9600);
  sensorSerial.listen();
  delay(500);
 
@@ -138,7 +139,7 @@ void loop() {
     }
  }
 
- unsigned long current_time = millis();
+ 
  int readVal=analogRead(sensorPin); // 토양 습도값
  Serial.print("토양센서: ");
  Serial.println(readVal);
@@ -157,8 +158,6 @@ data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33";
       idx = str.indexOf(",");
       humidity = str.substring(0,idx);
       lux = str.substring(idx+1);
-      
-     
 //      Serial.println(temperature);
 //      Serial.println(humidity);
 //      Serial.println(lux);
@@ -176,6 +175,7 @@ data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33";
  Serial.println(data);
 
  delay(500);
+ sensorSerial.end();
  
  mySerial.listen();
   if (mySerial.isListening()) {
@@ -183,7 +183,8 @@ data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33";
   }
  
  delay(500);
-// if(current_time - prev_time > 40000){
+ unsigned long current_time = millis();
+// if(current_time - prev_time > 10000){
   JSN270.print("GET /api/test");
   JSN270.print("?id=");
   JSN270.print(demo_key);
@@ -191,6 +192,7 @@ data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33";
   JSN270.println("HTTP/1.1");
   JSN270.println("Host: 13.125.92.56");
   JSN270.println();
+
   
   JSN270.print("POST /api/log ");
   JSN270.println("HTTP/1.1");
@@ -204,8 +206,8 @@ data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33";
   JSN270.println(data);
 //  prev_time = current_time;
 //  }
-  delay(200);
-  int idx = 0;
+
+ int idx = 0;
   while(JSN270.available()){
     response = JSN270.readString();
   if(response.indexOf("True") != -1){
@@ -214,7 +216,9 @@ data = "id=f2f423e8-467f-4ff1-9dfa-1674c615ef33";
 
   if(response.indexOf("False") != -1){
     digitalWrite(ledPin,LOW);
-  }
+  } 
+ // delay(500);
+ 
 }
 
 //  if(response.indexOf("Fa") != -1 || response.indexOf("Tr")!=-1){  
