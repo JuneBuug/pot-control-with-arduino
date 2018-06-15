@@ -1,9 +1,11 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from rest_framework import mixins, status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from fcm_django.models import FCMDevice
 
 from REST.models import *
 from REST.serializer import PlantSerializer, PlantLogSerializer,LEDSerializer
@@ -66,7 +68,7 @@ class LogAPI(GenericAPIView, mixins.ListModelMixin):
     def post(self, request, *args, **kwargs):
         if request.POST['id']:
             plant = Plant.objects.get(id=request.POST['id'])
-            PlantLog.objects.create(plant=plant, temperature=request.POST['temperature'], humidity=request.POST['humidity'], brightness=request.POST['brightness'],soil_water=request.POST['soil_water'])
+            PlantLog.objects.create(plant=plant, temperature=request.POST['temperature'], humidity=request.POST['humidity'], brightness=request.POST['brightness'], soil_water=request.POST['soil_water'])
             return Response(data='LOG IS SUCCESSFULLY CREATED', status=status.HTTP_201_CREATED)
         else:
             return Response(data='PLANT ID IS EMPTY', status=status.HTTP_400_BAD_REQUEST)
@@ -107,3 +109,13 @@ class TestAPI(APIView):
         plant = Plant.objects.get(id=plant_id)
         content = str(plant.is_led_active)
         return Response(content)
+
+
+def fcm(request):
+    # device = FCMDevice.objects.all().first()
+    # device.send_message(title='GROWW', body='호이', color='#0c8061f2')
+    if request.method == "POST":
+        message = request.POST["message"]
+        device = FCMDevice.objects.all().first()
+        device.send_message(title='GROWW', body=message, color='#0c8061f2')
+    return render(request, 'REST/fcm.html')

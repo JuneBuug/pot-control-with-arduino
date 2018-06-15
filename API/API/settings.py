@@ -43,6 +43,9 @@ INSTALLED_APPS = [
 
     'REST',
     # REST API 앱
+
+    'fcm_django',
+    # 푸시 알림을 위한 fcm django
 ]
 
 MIDDLEWARE = [

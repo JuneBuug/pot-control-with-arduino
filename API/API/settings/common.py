@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 #BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,7 +44,31 @@ INSTALLED_APPS = [
 
     'REST',
     # REST API 앱
+
+    'fcm_django'
+    # 푸시 알림을 위한 fcm django
 ]
+
+
+path = os.path.join(BASE_DIR, 'envs.json')
+
+with open(path) as f:
+    dict = json.load(f)
+    SECRET_KEY = dict["SECRET_KEY"]
+    API_KEY = dict["API_KEY"]
+
+
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": API_KEY,
+         # true if you want to have only one active device per registered user at a time
+         # default: False
+        "ONE_DEVICE_PER_USER": False,
+         # devices to which notifications cannot be sent,
+         # are deleted upon receiving error response from FCM
+         # default: False
+        "DELETE_INACTIVE_DEVICES": False,
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

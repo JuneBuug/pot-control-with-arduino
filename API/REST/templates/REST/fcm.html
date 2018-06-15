@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FCM 메시지 전송</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-lg-4">
+
+        </div>
+        <div class="col-lg-4">
+            <br>
+            fcm 전송 페이지
+            <hr>
+            <form method="POST" action={% url 'fcm' %}>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="보내고 싶은 메시지" aria-label="메시지"
+                           aria-describedby="basic-addon2" name="message">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">전송</button>
+                    </div>
+                    {% csrf_token %}
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-4">
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
