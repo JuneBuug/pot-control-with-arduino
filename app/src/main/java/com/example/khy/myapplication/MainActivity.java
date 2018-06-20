@@ -127,11 +127,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 // 가운데 아래 놓기
                 TextView pop_light_val = (TextView)popupview_light.findViewById(R.id.light_val);
+                Switch pop_led_val = (Switch)popupview_light.findViewById(R.id.switch2);
                 TextView pop_light_txt = (TextView)popupview_light.findViewById(R.id.light_txt);
                 TextView light_val = (TextView)findViewById(R.id.light_val);
+                TextView led_val = (TextView)findViewById(R.id.led_val);
                 TextView light_txt = (TextView)findViewById(R.id.light_txt);
                 pop_light_val.setText((String)light_val.getText());
+                pop_led_val.setChecked(Boolean.valueOf((String)led_val.getText()));
                 pop_light_txt.setText((String)light_txt.getText());
+
                 popup_light.showAtLocation(linear_light, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 50,50);
             }
         });
@@ -230,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
                     String humidity = order.getString("humidity");
                     String brightness = order.getString("brightness");
                     String soil_water = order.getString("soil_water");
+                    String is_led_active = order.getJSONObject("plant_info").getString("is_led_active");
 
                     TextView t = (TextView)findViewById(R.id.temperature_val);
                     TextView t2 = (TextView)findViewById(R.id.temperature_txt);
@@ -277,10 +282,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                     TextView b = (TextView)findViewById(R.id.light_val);
                     TextView b2 = (TextView)findViewById(R.id.light_txt);
+                    TextView b3 = (TextView)findViewById(R.id.led_val);
                     ImageView ib1 = (ImageView)findViewById(R.id.light_status1);
                     ImageView ib2 = (ImageView)findViewById(R.id.light_status2);
                     ImageView ib3 = (ImageView)findViewById(R.id.light_status3);
                     b.setText(brightness);
+                    b3.setText(is_led_active);
                     if(Integer.parseInt(brightness) < 500){
                         b2.setText("어두워요");
                         ib1.setImageResource(R.drawable.status_red);
