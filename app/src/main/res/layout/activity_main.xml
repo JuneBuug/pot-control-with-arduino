@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="337dp"
+        android:src="@drawable/background" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/flower"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:src="@drawable/grass2" />
+
+            <TextView
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="쑥쑥이" />
+
+            <TextView
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="스킨답서스"
+                android:textColor="#97979b" />
+
+            <TextView
+                android:id= "@+id/result"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_weight = "1"
+            android:gravity="center_vertical">
+            <ImageView
+                android:id="@+id/temperature_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:src="@drawable/temperature" />
+            <LinearLayout
+                android:id="@+id/temperature"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:padding="8dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="온도"
+                    android:textSize="5pt"
+                    android:textColor="#97979b"
+                    android:gravity="center"/>
+                <TextView
+                    android:id="@+id/temperature_txt"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="적당해요"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:id="@+id/temperature_val"
+                    android:visibility="invisible" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/temperature_status1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+
+                    <ImageView
+                        android:id="@+id/temperature_status2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+
+                    <ImageView
+                        android:id="@+id/temperature_status3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/humidity_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:src="@drawable/humidity" />
+            <LinearLayout
+                android:id="@+id/humidity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:padding="8dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="습도"
+                    android:textSize="5pt"
+                    android:textColor="#97979b"
+                    android:gravity="center"/>
+                <TextView
+                    android:id="@+id/humidity_txt"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="적당해요"
+                    android:gravity="center"/>
+                <TextView
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:id="@+id/humidity_val"
+                    android:visibility="invisible" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/humidity_status1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+
+                    <ImageView
+                        android:id="@+id/humidity_status2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+
+                    <ImageView
+                        android:id="@+id/humidity_status3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+                </LinearLayout>
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_weight = "1"
+            android:gravity="center_vertical">
+            <ImageView
+                android:id="@+id/light_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:src="@drawable/light" />
+            <LinearLayout
+                android:id="@+id/light"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:padding="8dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="조도"
+                    android:textSize="5pt"
+                    android:textColor="#97979b"
+                    android:gravity="center"/>
+                <TextView
+                    android:id="@+id/light_txt"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="적당해요"
+                    android:gravity="center"/>
+                <TextView
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:id="@+id/light_val"
+                    android:visibility="invisible" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/light_status1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+
+                    <ImageView
+                        android:id="@+id/light_status2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+
+                    <ImageView
+                        android:id="@+id/light_status3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+                </LinearLayout>
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/soilwater_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:src="@drawable/soilwater" />
+            <LinearLayout
+                android:id="@+id/soilwater"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:padding="8dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="토양수분"
+                    android:textSize="5pt"
+                    android:textColor="#97979b"
+                    android:gravity="center"/>
+                <TextView
+                    android:id="@+id/soilwater_txt"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="적당해요"
+                    android:gravity="center"/>
+                <TextView
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:id="@+id/soilwater_val"
+                    android:visibility="invisible" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/soilwater_status1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+
+                    <ImageView
+                        android:id="@+id/soilwater_status2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+
+                    <ImageView
+                        android:id="@+id/soilwater_status3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/status_grey" />
+                </LinearLayout>
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
