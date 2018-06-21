@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "81125939300",
+    "firebase_url": "https://arduino-a9bad.firebaseio.com",
+    "project_id": "arduino-a9bad",
+    "storage_bucket": "arduino-a9bad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81125939300:android:d5341a24d1824157",
+        "android_client_info": {
+          "package_name": "com.example.khy.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81125939300-g2qn8mgj3rnh0png2nkenk2720iim1kl.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "81125939300-g2qn8mgj3rnh0png2nkenk2720iim1kl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9FTc2fv55ugnIjZ2F19ax1SSXWvIB9_o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
