@@ -66,7 +66,7 @@
             android:textSize="8pt" />
 
         <Switch
-            android:id="@+id/switch2"
+            android:id="@+id/led_val"
             android:layout_width="50dp"
             android:layout_height="60dp"
             android:scaleX="1.5"

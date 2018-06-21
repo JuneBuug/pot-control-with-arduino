@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +27,8 @@ import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,11 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
     JSONObject order;
 
+    private static final String TAG = "MyFirebaseMsgService";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "Refreshed token: " + refreshedToken);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -127,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 // 가운데 아래 놓기
                 TextView pop_light_val = (TextView)popupview_light.findViewById(R.id.light_val);
-                Switch pop_led_val = (Switch)popupview_light.findViewById(R.id.switch2);
+                Switch pop_led_val = (Switch)popupview_light.findViewById(R.id.led_val);
                 TextView pop_light_txt = (TextView)popupview_light.findViewById(R.id.light_txt);
                 TextView light_val = (TextView)findViewById(R.id.light_val);
                 TextView led_val = (TextView)findViewById(R.id.led_val);
@@ -139,12 +145,18 @@ public class MainActivity extends AppCompatActivity {
                 popup_light.showAtLocation(linear_light, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 50,50);
             }
         });
+        Switch led_val = (Switch)popupview_light.findViewById(R.id.led_val);
+        led_val.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                sendPost();
+            }
+        });
         ImageButton btnclose3 = (ImageButton)popupview_light.findViewById(R.id.btnclose);
         btnclose3.setOnClickListener(new ImageButton.OnClickListener() {
             public void onClick(View v){
-
+                //sendPost();
                 popup_light.dismiss();
-                sendPost();
             }
         });
 
@@ -342,37 +354,63 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://13.125.92.56/api/log");
+                    Boolean led_status;
+                    String s = ""; //status
+                    Switch ischecked = (Switch)popupview_light.findViewById(R.id.led_val);
+                    led_status = ischecked.isChecked();
+                    if(led_status){
+                        s = "H";
+                    } else {
+                        s = "L";
+                    }
+                    URL url = new URL("http://172.20.10.10/" + s);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Accept","application/json");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
+                    conn.setRequestMethod("GET");
+                    //add request header
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-                    Switch sth = (Switch)popupview_light.findViewById(R.id.switch2);
+                    int responseCode = conn.getResponseCode();
+                    System.out.println("\nSending 'GET' request to URL : " + url);
+                    System.out.println("Response Code : " + responseCode);
 
-                    JSONObject jsonParam = order;
-                    jsonParam.getJSONObject("plant_info").remove("is_led_active");
-                    jsonParam.getJSONObject("plant_info").remove("device_token");
-                    jsonParam.getJSONObject("plant_info").put("is_led_active", sth.isChecked());
-                    jsonParam.getJSONObject("plant_info").put("device_token", "none");
-//                    jsonParam.put("timestamp", 1488873360);
-//                    jsonParam.put("uname", message.getUser());
-//                    jsonParam.put("message", message.getMessage());
-//                    jsonParam.put("latitude", 0D);
-//                    jsonParam.put("longitude", 0D);
+                    BufferedReader in = new BufferedReader(
+                            new InputStreamReader(conn.getInputStream()));
+                    String inputLine;
+                    StringBuffer response = new StringBuffer();
 
-                    Log.i("JSON", jsonParam.toString());
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                    //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-                    os.writeBytes(jsonParam.toString());
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
 
-                    os.flush();
-                    os.close();
+                    //print result
+                    System.out.println(response.toString());
+                    TextView led_val = (TextView)findViewById(R.id.led_val);
+                    led_val.setText(Boolean.toString(led_status));
 
-                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                    Log.i("MSG" , conn.getResponseMessage());
+//                    Switch sth = (Switch)popupview_light.findViewById(R.id.led_val);
+//
+//                    JSONObject jsonParam = order;
+//                    jsonParam.getJSONObject("plant_info").remove("is_led_active");
+//                    jsonParam.getJSONObject("plant_info").remove("device_token");
+//                    jsonParam.getJSONObject("plant_info").put("is_led_active", sth.isChecked());
+//                    jsonParam.getJSONObject("plant_info").put("device_token", "none");
+////                    jsonParam.put("timestamp", 1488873360);
+////                    jsonParam.put("uname", message.getUser());
+////                    jsonParam.put("message", message.getMessage());
+////                    jsonParam.put("latitude", 0D);
+////                    jsonParam.put("longitude", 0D);
+
+//                    Log.i("JSON", jsonParam.toString());
+//                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+//                    //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+//                    os.writeBytes(jsonParam.toString());
+//
+//                    os.flush();
+//                    os.close();
+//
+//                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+//                    Log.i("MSG" , conn.getResponseMessage());
 
                     conn.disconnect();
                 } catch (Exception e) {
