@@ -122,26 +122,28 @@ void loop()
     client.println();
     client.println(data);
   }
-    
+    client.flush();
   // if there are incoming bytes available
   // from the server, read them and print them
   String str = "";
-  while (client.available()) {
+  while (client.available()&& status == WL_CONNECTED) {
     //Serial.print("enter");
     char c = client.read();
     str += c;
     Serial.write(c);
   }
+  client.stop();
+
   Serial.println(str);
   // if the server's disconnected, stop the client
-  if (!client.connected()) {
-    Serial.println();
-    Serial.println("Disconnecting from server...");
-    client.stop();
-
-    // do nothing forevermore
-    while (true);
-  }
+//  if (!client.connected()) {
+//    Serial.println();
+//    Serial.println("Disconnecting from server...");
+//    client.stop();
+//
+//    // do nothing forevermore
+//    while (true);
+//  }
   // digitalWrite(pin_LED, HIGH);
   delay(1000);
   if(str.indexOf("False") != -1){
