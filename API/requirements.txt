@@ -10,4 +10,4 @@ pyfcm==1.4.5
 pytz==2018.4
 requests==2.20.0
 requests-toolbelt==0.8.0
-urllib3==1.24.2
+urllib3==1.26.5
